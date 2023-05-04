@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fetion.base.mapper.common.FriendMapper">
+
+    <resultMap id="FriendResult" type="com.fetion.base.entity.common.Friend">
+        <id column="id"  property="id" />
+        <id column="status"  property="status" />
+        <id column="remark"  property="remark" />
+        <id column="msg_status"  property="msgStatus" />
+        <id column="flag"  property="flag" />
+
+        <association property="account" column="id = account_id" javaType="com.fetion.base.entity.common.Account"
+                     select="com.fetion.base.mapper.common.AccountMapper.getAccountById"/>
+        <association property="friendAccount" column="id = friend_account_id" javaType="com.fetion.base.entity.common.Account"
+                     select="com.fetion.base.mapper.common.AccountMapper.getAccountById"/>
+
+    </resultMap>
+
+    <select id="findByAccountId" resultMap="FriendResult">
+        select * from friend  where account_id = #{accountId}
+    </select>
+    <select id="findAllAccount" resultMap="FriendResult">
+        select distinct id,username,info,head_pic from base_account where id != #{id}
+    </select>
+
+    <delete id="deleteFlag">
+        delete from friend where flag = #{flag}
+    </delete>
+    <select id="findById" resultMap="FriendResult">
+         select * from friend  where id = #{id}
+    </select>
+</mapper>

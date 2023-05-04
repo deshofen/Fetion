@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fetion.base.mapper.common.MsgLogMapper">
+
+
+    <resultMap id="logResult" type="com.fetion.base.entity.common.MsgLog">
+        <id column="id"  property="id" />
+        <id column="status"  property="status" />
+        <association property="account" column="id = account_id" javaType="com.fetion.base.entity.common.Account"
+                     select="com.fetion.base.mapper.common.AccountMapper.getAccountById"/>
+        <association property="msgContent" column="id = msg_content_id" javaType="com.fetion.base.entity.common.MsgContent"
+                     select="com.fetion.base.mapper.common.MsgContentMapper.getContentById"/>
+
+    </resultMap>
+
+    <select id="findByAccountIdAndStatus" resultMap="logResult">
+        select * from msg_log  where account_id = #{accountId} and status = #{status}
+    </select>
+    <select id="findByMsgContentId" resultMap="logResult">
+        select * from msg_log  where msg_content_id = #{msgContentId}
+    </select>
+    <select id="findById" resultMap="logResult">
+         select * from msg_log  where id = #{id}
+    </select>
+</mapper>

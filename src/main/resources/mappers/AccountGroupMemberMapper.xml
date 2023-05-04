@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fetion.base.mapper.common.AccountGroupMemberMapper">
+
+
+    <resultMap id="AccountGroupMemberResult" type="com.fetion.base.entity.common.AccountGroupMember">
+        <id column="id"  property="id" />
+        <id column="msg_status"  property="msgStatus" />
+        <id column="nickname"  property="nickname" />
+        <id column="m_status"  property="meStatus" />
+        <association property="accountGroup" column="id = account_group_id" javaType="com.fetion.base.entity.common.AccountGroup"
+                     select="com.fetion.base.mapper.common.AccountGroupMapper.findById"/>
+
+        <association property="member" column="id = member_id" javaType="com.fetion.base.entity.common.Account"
+                     select="com.fetion.base.mapper.common.AccountMapper.getAccountById"/>
+    </resultMap>
+    <select id="findByAccountGroupId" resultMap="AccountGroupMemberResult">
+        select * from account_group_member where account_group_id = #{accountGroupId}
+    </select>
+    <select id="findByMemberId" resultMap="AccountGroupMemberResult">
+        select * from account_group_member where member_id = #{memberId}
+    </select>
+    <select id="findByAccountGroupIdAndMemberId" resultMap="AccountGroupMemberResult">
+        select * from account_group_member where account_group_id = #{accountGroupId} and member_id = #{memberId}
+    </select>
+    <select id="findbById" resultMap="AccountGroupMemberResult">
+         select * from account_group_member where id = #{id}
+    </select>
+    <delete id="deleteByGroup">
+        delete from account_group_member where account_group_id = #{accountGroupId}
+    </delete>
+
+
+</mapper>

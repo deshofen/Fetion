@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fetion.base.mapper.admin.MenuMapper">
+
+    <resultMap id="menuResult" type="com.fetion.base.entity.admin.Menu">
+        <id column="id"  property="id" />
+        <id column="name"  property="name" />
+        <id column="url"  property="url" />
+        <id column="icon"  property="icon" />
+        <id column="sort"  property="sort" />
+        <id column="is_bitton"  property="isButton" />
+        <id column="is_show"  property="isShow" />
+<!--        <collection column="{parentId=id}" javaType="java.util.List" ofType="com.fetion.base.entity.admin.Menu"-->
+<!--                    property="parent" select="com.fetion.base.mapper.admin.MenuMapper.findMenuParentList">-->
+
+<!--        </collection>-->
+        <association property="parent" column="id = parent_id" javaType="com.fetion.base.entity.admin.Menu"
+                     select="com.fetion.base.mapper.admin.MenuMapper.getMenuById"/>
+
+    </resultMap>
+
+    <select id="getMenuById" resultMap="menuResult">
+        select * from menu where  id = #{id}
+    </select>
+
+    <select id="getMenuByRoleId" resultMap="menuResult">
+        select m.* from menu m,role_authorities ra  where m.id = ra.authorities_id and  ra.role_id = #{roleId}
+    </select>
+    <select id="findAll" resultMap="menuResult">
+         select * from menu
+    </select>
+</mapper>

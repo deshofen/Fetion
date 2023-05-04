@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fetion.base.mapper.home.GroupRequestMapper">
+
+
+    <resultMap id="GroupRequestResult" type="com.fetion.base.entity.home.GroupRequest">
+        <id column="id"  property="id" />
+        <id column="status"  property="status" />
+        <id column="remark"  property="remark" />
+
+        <association property="sender" column="id = sender_account_id" javaType="com.fetion.base.entity.common.Account"
+                     select="com.fetion.base.mapper.common.AccountMapper.getAccountById"/>
+        <association property="reciever" column="id = reciever_account_id" javaType="com.fetion.base.entity.common.Account"
+                     select="com.fetion.base.mapper.common.AccountMapper.getAccountById"/>
+        <association property="accountGroup" column="id = account_group_id" javaType="com.fetion.base.entity.common.AccountGroup"
+                     select="com.fetion.base.mapper.common.AccountGroupMapper.findById"/>
+    </resultMap>
+
+    <select id="findByRecieverOrderByUpdateTimeDesc" resultMap="GroupRequestResult">
+        select * from group_request  where reciever_account_id = #{reciever.id}
+    </select>
+    <select id="findBySenderAndReciever" resultType="com.fetion.base.entity.home.GroupRequest">
+        select * from group_request  where reciever_account_id = #{sender.id} and sender_account_id = #{reciever.id}
+    </select>
+    <select id="getGroupRequestCount" resultType="java.lang.Integer">
+        select count(fr.id) from group_request fr where fr.reciever_account_id = #{recieverId} and fr.status = #{status}
+    </select>
+
+    <select id="findById" resultMap="GroupRequestResult">
+         select * from group_request  where id = #{id}
+    </select>
+
+    <delete id="deleteByAccountGroupId">
+        delete from group_request where account_group_id = #{accountGroupId}
+    </delete>
+</mapper>
